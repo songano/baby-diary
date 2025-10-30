@@ -1,7 +1,7 @@
 /**
  * 관계 타입
  */
-export const RELATIONSHIP_TYPES = [
+export const RELATIONSHIP_VALUES = [
   'mother',
   'father',
   'grandmother_paternal',
@@ -15,7 +15,7 @@ export const RELATIONSHIP_TYPES = [
   'other',
 ] as const;
 
-export type RelationshipType = (typeof RELATIONSHIP_TYPES)[number];
+export type RelationshipType = (typeof RELATIONSHIP_VALUES)[number];
 
 /**
  * 관계 표시명
@@ -33,6 +33,14 @@ export const RELATIONSHIP_LABELS: Record<RelationshipType, string> = {
   guardian: '보호자',
   other: '기타',
 };
+
+/**
+ * 관계 옵션 배열 (Select에서 사용)
+ */
+export const RELATIONSHIP_OPTIONS = RELATIONSHIP_VALUES.map(value => ({
+  value,
+  label: RELATIONSHIP_LABELS[value],
+}));
 
 /**
  * 약관 타입
