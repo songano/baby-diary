@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/incompatible-library */
 'use client';
 
 import { Button } from '@/shared/components/ui/button';
@@ -11,12 +12,16 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RELATIONSHIP_OPTIONS } from '../constants/auth.constants';
 import dynamic from 'next/dynamic';
+import { useState } from 'react';
 
 const DevTool: React.ElementType = dynamic(() => import('@hookform/devtools').then(module => module.DevTool), {
   ssr: false,
 });
 
 const SignUpForm = () => {
+  const [isVerifyingEmail, setIsVerifyingEmail] = useState<boolean>(false);
+  const [isSentEmail, setIsSentEmail] = useState<boolean>(false);
+
   const methods = useForm<SignUpFormData>({
     resolver: zodResolver(signUpFormSchema),
     mode: 'onChange', // 실시간 검증
@@ -34,12 +39,35 @@ const SignUpForm = () => {
     },
   });
 
-  const { control, handleSubmit, watch } = methods;
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setValue,
+    trigger,
+  } = methods;
 
-  const watchRelationship = watch('relationship');
+  const watchEmailVerified = watch('emailVerified');
 
-  const onSubmit = (data: SignUpFormData) => {
+  const onSubmit = async (data: SignUpFormData) => {
     console.log(data);
+  };
+
+  const handleVerifyEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setIsVerifyingEmail(true);
+    setIsSentEmail(true);
+
+    // email 형식 확인
+    const isVerified = await trigger('email');
+    if (!isVerified) return;
+
+    // 임시로 체크
+    setTimeout(() => {
+      setValue('emailVerified', true);
+      setIsVerifyingEmail(false);
+    }, 3000);
   };
 
   return (
@@ -60,7 +88,9 @@ const SignUpForm = () => {
                     aria-invalid={fieldState.invalid}
                     placeholder="닉네임을 입력해주세요"
                   />
-                  <Button variant={'secondary'}>중복확인</Button>
+                  <Button type="button" variant={'secondary'} disabled={fieldState.invalid || !field.value}>
+                    중복확인
+                  </Button>
                 </div>
                 <FieldError>{fieldState.error?.message}</FieldError>
               </Field>
@@ -76,8 +106,15 @@ const SignUpForm = () => {
                 <FieldLabel htmlFor="email">이메일</FieldLabel>
                 <div className="flex gap-2">
                   <Input {...field} id="email" aria-invalid={fieldState.invalid} placeholder="이메일을 입력해주세요" />
-                  <Button variant={'secondary'}>인증하기</Button>
+                  <Button
+                    variant={'secondary'}
+                    disabled={fieldState.invalid || !field.value || watchEmailVerified}
+                    onClick={handleVerifyEmail}
+                  >
+                    {watchEmailVerified ? '인증완료' : '인증하기'}
+                  </Button>
                 </div>
+                {isSentEmail && <Input type="text" id="verifyCode" placeholder="인증코드를 입력해주세요" />}
                 <FieldError>{fieldState.error?.message}</FieldError>
               </Field>
             )}
@@ -144,7 +181,7 @@ const SignUpForm = () => {
 
                 <FieldError>{fieldState.error?.message}</FieldError>
 
-                {watchRelationship === 'other' && (
+                {field.value === 'other' && (
                   <Controller
                     name="customRelationship"
                     control={control}
@@ -216,7 +253,7 @@ const SignUpForm = () => {
                     onCheckedChange={field.onChange}
                     aria-invalid={fieldState.invalid}
                   />
-                  <FieldLabel htmlFor="marketingTerm">
+                  <FieldLabel htmlFor="agreeToMarketing">
                     <span className="text-xs">마케팅 정보 수신동의(선택)</span>
                   </FieldLabel>
                 </Field>
@@ -226,9 +263,27 @@ const SignUpForm = () => {
         </FieldGroup>
 
         <Button type="submit" className="mt-9">
-          Submit
+          회원가입
         </Button>
+
+        {process.env.NODE_ENV === 'development' && (
+          <details className="mt-4">
+            <summary className="cursor-pointer text-sm text-gray-500">디버그 정보</summary>
+            <pre className="mt-2 max-h-96 overflow-auto rounded bg-gray-100 p-4 text-xs">
+              {JSON.stringify(
+                {
+                  values: watch(),
+                  errors,
+                  // nicknameCheckResult,
+                },
+                null,
+                2
+              )}
+            </pre>
+          </details>
+        )}
       </form>
+
       <DevTool control={control} />
     </>
   );
