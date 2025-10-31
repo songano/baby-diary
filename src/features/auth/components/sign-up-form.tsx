@@ -50,8 +50,26 @@ const SignUpForm = () => {
 
   const watchEmailVerified = watch('emailVerified');
 
-  const onSubmit = async (data: SignUpFormData) => {
-    console.log(data);
+  const onSubmit = async (formData: SignUpFormData) => {
+    console.log(formData);
+    // 닉네임 중복확인/이메일 인증이 완료되야 가입처리
+    try {
+      const response = await fetch('/api/auth/sign-up', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        console.log('회원가입이 완료되었습니다.');
+      } else {
+        console.log(result.message || '회원가입 실패');
+      }
+    } catch (error) {
+      console.error('Error signing up:', error);
+      return;
+    }
   };
 
   const handleVerifyEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {

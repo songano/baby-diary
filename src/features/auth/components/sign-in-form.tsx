@@ -5,7 +5,6 @@ import { Checkbox } from '@/shared/components/ui/checkbox';
 import { Input } from '@/shared/components/ui/input';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/shared/components/ui/input-group';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
-import Link from 'next/link';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SignInFormData, signInFormSchema } from '../utils/validation';
@@ -73,30 +72,21 @@ const SignInForm = () => {
         )}
       />
 
+      {/* 자동로그인 */}
+      <Controller
+        name="rememberMe"
+        control={control}
+        render={({ field }) => (
+          <Field orientation={'horizontal'}>
+            <Checkbox onCheckedChange={field.onChange} checked={field.value} id="rememberMe" />
+            <FieldLabel htmlFor="rememberMe" className="cursor-pointer text-sm text-gray-500">
+              자동로그인
+            </FieldLabel>
+          </Field>
+        )}
+      />
+
       <Button type="submit">Submit</Button>
-
-      <div className="flex justify-between">
-        {/* 자동로그인 */}
-        <div className="flex items-center gap-2">
-          <Controller
-            name="rememberMe"
-            control={control}
-            render={({ field }) => (
-              <Field orientation={'horizontal'}>
-                <Checkbox onCheckedChange={field.onChange} checked={field.value} id="rememberMe" />
-                <FieldLabel htmlFor="rememberMe" className="cursor-pointer text-sm text-gray-500">
-                  자동로그인
-                </FieldLabel>
-              </Field>
-            )}
-          />
-        </div>
-
-        {/* 아이디/비밀번호 찾기 */}
-        <div className="text-sm text-gray-500">
-          <Link href="/forgot-password">아이디/비밀번호 찾기</Link>
-        </div>
-      </div>
     </form>
   );
 };

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import SignInForm from '../../../features/auth/components/sign-in-form';
 import { Button } from '@/shared/components/ui/button';
-import { Separator } from '@/shared/components/ui/separator';
+import { SeparatorText } from '@/shared/components/ui/separator';
 
 const LoginPage = () => {
   return (
@@ -15,12 +15,19 @@ const LoginPage = () => {
       {/* 로그인 폼 */}
       <SignInForm />
 
-      {/* 회원가입 */}
-      <div className="text-center text-sm text-gray-500 hover:underline">
-        <Link href="/sign-up">아직 회원이 아니신가요?</Link>
+      <div className="flex justify-between">
+        {/* 회원가입 */}
+        <div className="text-center text-sm text-gray-500 hover:underline">
+          <Link href="/sign-up">회원가입</Link>
+        </div>
+
+        {/* 아이디/비밀번호 찾기 */}
+        <div className="text-sm text-gray-500">
+          <Link href="/forgot-password">아이디/비밀번호 찾기</Link>
+        </div>
       </div>
 
-      <Separator className="my-6" />
+      <SeparatorText text="또는" />
 
       {/* 소셜로그인 */}
       <div className="flex flex-col justify-center gap-1">
