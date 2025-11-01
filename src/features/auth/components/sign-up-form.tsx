@@ -13,6 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { RELATIONSHIP_OPTIONS } from '../constants/auth.constants';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
+import { authApi } from '../api/auth.api';
 
 const DevTool: React.ElementType = dynamic(() => import('@hookform/devtools').then(module => module.DevTool), {
   ssr: false,
@@ -88,6 +89,12 @@ const SignUpForm = () => {
     }, 3000);
   };
 
+  const checkNickname = async () => {
+    const nickname = watch('nickname');
+    const res = await authApi.checkNickname({ nickname });
+    console.log(res);
+  };
+
   return (
     <>
       <form className="flex flex-col gap-2" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
@@ -106,7 +113,12 @@ const SignUpForm = () => {
                     aria-invalid={fieldState.invalid}
                     placeholder="닉네임을 입력해주세요"
                   />
-                  <Button type="button" variant={'secondary'} disabled={fieldState.invalid || !field.value}>
+                  <Button
+                    onClick={checkNickname}
+                    type="button"
+                    variant={'secondary'}
+                    disabled={fieldState.invalid || !field.value}
+                  >
                     중복확인
                   </Button>
                 </div>
