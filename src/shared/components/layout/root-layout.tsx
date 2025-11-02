@@ -2,6 +2,8 @@ import { Geist, Geist_Mono } from 'next/font/google';
 
 import { Toaster } from 'sonner';
 
+import Providers from '@/shared/lib/providers';
+
 import type { Metadata } from 'next';
 
 import '@/styles/globals.css';
@@ -29,8 +31,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <main>{children}</main>
-        <Toaster position="top-right" />
+        <Providers>
+          <main>{children}</main>
+          <Toaster position="top-right" />
+        </Providers>
       </body>
     </html>
   );

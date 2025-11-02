@@ -16,6 +16,7 @@ const eslintConfig = defineConfig([
     rules: {
       'prettier/prettier': 'warn',
       '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-explicit-any': 'off',
       'import/order': [
         'error',
         {
