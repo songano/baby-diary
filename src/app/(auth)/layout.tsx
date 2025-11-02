@@ -1,5 +1,6 @@
-import RootLayout from '@/shared/components/layout/root-layout';
 import React from 'react';
+
+import RootLayout from '@/shared/components/layout/root-layout';
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (

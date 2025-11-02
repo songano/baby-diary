@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import {
   EMAIL_CONSTRAINTS,
   FORBIDDEN_NICKNAME_PATTERNS,

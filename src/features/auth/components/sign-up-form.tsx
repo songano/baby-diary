@@ -1,21 +1,24 @@
 /* eslint-disable react-hooks/incompatible-library */
 'use client';
 
+import { useState } from 'react';
+
+import dynamic from 'next/dynamic';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CheckIcon } from 'lucide-react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+
 import { Button } from '@/shared/components/ui/button';
 import { Checkbox } from '@/shared/components/ui/checkbox';
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '@/shared/components/ui/field';
 import { Input } from '@/shared/components/ui/input';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/shared/components/ui/input-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select';
 
-import { Controller, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { RELATIONSHIP_OPTIONS } from '../constants/auth.constants';
-import dynamic from 'next/dynamic';
-import { useState } from 'react';
 import { authApi } from '../api/auth.api';
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@/shared/components/ui/input-group';
-import { CheckIcon } from 'lucide-react';
-import { toast } from 'sonner';
+import { RELATIONSHIP_OPTIONS } from '../constants/auth.constants';
 import { SignUpFormData, signUpFormSchema } from '../utils/validation';
 
 const DevTool: React.ElementType = dynamic(() => import('@hookform/devtools').then(module => module.DevTool), {

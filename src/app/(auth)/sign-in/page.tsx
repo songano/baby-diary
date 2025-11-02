@@ -1,7 +1,9 @@
 import Link from 'next/link';
-import SignInForm from '../../../features/auth/components/sign-in-form';
+
 import { Button } from '@/shared/components/ui/button';
 import { SeparatorText } from '@/shared/components/ui/separator';
+
+import SignInForm from '../../../features/auth/components/sign-in-form';
 
 const LoginPage = () => {
   return (

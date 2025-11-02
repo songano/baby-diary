@@ -1,15 +1,18 @@
 'use client';
 
+import { useState } from 'react';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { Controller, useForm } from 'react-hook-form';
+
 import { Button } from '@/shared/components/ui/button';
 import { Checkbox } from '@/shared/components/ui/checkbox';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/shared/components/ui/field';
 import { Input } from '@/shared/components/ui/input';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/shared/components/ui/input-group';
-import { EyeIcon, EyeOffIcon } from 'lucide-react';
-import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+
 import { SignInFormData, signInFormSchema } from '../utils/validation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/shared/components/ui/field';
 
 const SignInForm = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);

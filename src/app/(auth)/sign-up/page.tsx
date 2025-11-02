@@ -1,6 +1,8 @@
-import SignUpForm from '@/features/auth/components/sign-up-form';
-import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+
+import { ArrowLeft } from 'lucide-react';
+
+import SignUpForm from '@/features/auth/components/sign-up-form';
 
 const SignupPage = () => {
   return (

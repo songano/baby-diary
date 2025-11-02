@@ -1,5 +1,7 @@
-import { emailSchema, nicknameSchema, passwordSchema } from '@/shared/utils/validation';
 import { z } from 'zod';
+
+import { emailSchema, nicknameSchema, passwordSchema } from '@/shared/utils/validation';
+
 import { RELATIONSHIP_VALUES } from '../constants/auth.constants';
 
 /**
