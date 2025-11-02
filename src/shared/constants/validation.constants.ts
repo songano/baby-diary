@@ -55,7 +55,7 @@ export const NICKNAME_CONSTRAINTS = {
   MIN_LENGTH: 2,
   MAX_LENGTH: 20,
   PATTERN: /^[가-힣a-zA-Z0-9_]+$/,
-  PATTERN_MESSAGE: '한글, 영문, 숫자, 언더스코어만 사용 가능합니다',
+  PATTERN_MESSAGE: '공백없이 한글, 영문, 숫자, 언더스코어만 사용 가능합니다',
 } as const;
 
 /**

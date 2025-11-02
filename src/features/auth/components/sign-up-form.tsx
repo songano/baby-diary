@@ -7,13 +7,16 @@ import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '@/s
 import { Input } from '@/shared/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select';
 
-import { SignUpFormData, signUpFormSchema } from '../utils/validation';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RELATIONSHIP_OPTIONS } from '../constants/auth.constants';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { authApi } from '../api/auth.api';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/shared/components/ui/input-group';
+import { CheckIcon } from 'lucide-react';
+import { toast } from 'sonner';
+import { SignUpFormData, signUpFormSchema } from '../utils/validation';
 
 const DevTool: React.ElementType = dynamic(() => import('@hookform/devtools').then(module => module.DevTool), {
   ssr: false,
@@ -22,8 +25,16 @@ const DevTool: React.ElementType = dynamic(() => import('@hookform/devtools').th
 const SignUpForm = () => {
   const [isVerifyingEmail, setIsVerifyingEmail] = useState<boolean>(false);
   const [isSentEmail, setIsSentEmail] = useState<boolean>(false);
+  const [isNicknameCheckResult, setNicknameCheckResult] = useState<boolean>(false);
 
-  const methods = useForm<SignUpFormData>({
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setValue,
+    trigger,
+  } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpFormSchema),
     mode: 'onChange', // 실시간 검증
     defaultValues: {
@@ -39,15 +50,6 @@ const SignUpForm = () => {
       agreeToMarketing: false,
     },
   });
-
-  const {
-    control,
-    handleSubmit,
-    watch,
-    formState: { errors },
-    setValue,
-    trigger,
-  } = methods;
 
   const watchEmailVerified = watch('emailVerified');
 
@@ -92,7 +94,15 @@ const SignUpForm = () => {
   const checkNickname = async () => {
     const nickname = watch('nickname');
     const res = await authApi.checkNickname({ nickname });
+
     console.log(res);
+
+    if (res.available) {
+      setNicknameCheckResult(true);
+      toast.success('사용 가능한 닉네임입니다');
+    } else {
+      toast.warning('사용할 수 없는 닉네임입니다');
+    }
   };
 
   return (
@@ -107,12 +117,25 @@ const SignUpForm = () => {
               <Field>
                 <FieldLabel htmlFor="nickname">닉네임</FieldLabel>
                 <div className="flex gap-2">
-                  <Input
-                    {...field}
-                    id="nickname"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="닉네임을 입력해주세요"
-                  />
+                  <InputGroup>
+                    <InputGroupInput
+                      {...field}
+                      id="nickname"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="닉네임을 입력해주세요"
+                      onChange={e => {
+                        field.onChange(e.target.value);
+                        setNicknameCheckResult(false);
+                      }}
+                    />
+                    {isNicknameCheckResult && (
+                      <InputGroupAddon align={'inline-end'}>
+                        <div className="bg-primary text-primary-foreground flex size-4 items-center justify-center rounded-full">
+                          <CheckIcon className="size-3 stroke-3" />
+                        </div>
+                      </InputGroupAddon>
+                    )}
+                  </InputGroup>
                   <Button
                     onClick={checkNickname}
                     type="button"
@@ -171,6 +194,7 @@ const SignUpForm = () => {
               )}
             />
 
+            {/* 비밀번호 확인 */}
             <Controller
               name="passwordConfirm"
               control={control}
@@ -211,6 +235,7 @@ const SignUpForm = () => {
 
                 <FieldError>{fieldState.error?.message}</FieldError>
 
+                {/* 관계기타 정의 */}
                 {field.value === 'other' && (
                   <Controller
                     name="customRelationship"
@@ -235,6 +260,7 @@ const SignUpForm = () => {
 
           {/* 약관 */}
           <FieldGroup>
+            {/* 서비스 이용약관 동의 */}
             <Controller
               name="agreeToService"
               control={control}
@@ -254,6 +280,7 @@ const SignUpForm = () => {
               )}
             />
 
+            {/* 개인정보 처리방침 동의 */}
             <Controller
               name="agreeToPrivacy"
               control={control}
@@ -272,6 +299,7 @@ const SignUpForm = () => {
               )}
             />
 
+            {/* 마케팅 정보 수신동의 */}
             <Controller
               name="agreeToMarketing"
               control={control}
@@ -292,10 +320,12 @@ const SignUpForm = () => {
           </FieldGroup>
         </FieldGroup>
 
+        {/* 회원가입 버튼 */}
         <Button type="submit" className="mt-9">
           회원가입
         </Button>
 
+        {/* 개발모드 : 디버그 */}
         {process.env.NODE_ENV === 'development' && (
           <details className="mt-4">
             <summary className="cursor-pointer text-sm text-gray-500">디버그 정보</summary>
