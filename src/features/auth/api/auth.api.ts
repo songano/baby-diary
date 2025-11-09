@@ -3,6 +3,7 @@ import { CheckNicknameRequest, CheckNicknameResponse } from '../types/auth.types
 const API_BASE_URL = '/api/auth';
 
 export const authApi = {
+  // 닉네임 중복 확인
   checkNickname: async (data: CheckNicknameRequest): Promise<CheckNicknameResponse> => {
     const response = await fetch(`${API_BASE_URL}/check-nickname`, {
       method: 'POST',
@@ -17,8 +18,10 @@ export const authApi = {
 
     return response.json();
   },
-};
 
-/**
- * 닉네임 중복 확인
- */
+  // 이메일 인증 및 중복 확인
+
+  // 회원가입
+
+  // 로그인
+};

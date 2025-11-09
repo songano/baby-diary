@@ -143,7 +143,7 @@ const SignUpForm = () => {
                     onClick={checkNickname}
                     type="button"
                     variant={'secondary'}
-                    disabled={fieldState.invalid || !field.value}
+                    disabled={fieldState.invalid || !field.value || isNicknameCheckResult}
                   >
                     중복확인
                   </Button>
