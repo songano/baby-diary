@@ -37,13 +37,14 @@ const SignUpForm = () => {
     formState: { errors },
     setValue,
     trigger,
+    setError,
   } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpFormSchema),
     mode: 'onChange', // 실시간 검증
     defaultValues: {
       nickname: '',
       email: '',
-      emailVerified: false,
+      emailVerified: true,
       password: '',
       passwordConfirm: '',
       relationship: undefined,
@@ -58,6 +59,13 @@ const SignUpForm = () => {
 
   const onSubmit = async (formData: SignUpFormData) => {
     console.log(formData);
+
+    if (!isNicknameCheckResult) {
+      // 닉네임 중복확인이 안된 경우 에러 추가
+      setError('nickname', { type: 'manual', message: '닉네임 중복 확인이 필요합니다.' });
+      return;
+    }
+
     // 닉네임 중복확인/이메일 인증이 완료되야 가입처리
     try {
       const response = await fetch('/api/auth/sign-up', {
