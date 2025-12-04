@@ -1,25 +1,34 @@
-import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { createClient } from '@/shared/lib/supabase/server';
+import { ZodError } from 'zod';
+
+import { authService } from '@/server/auth/auth.service';
 
 export async function POST(request: NextRequest) {
   try {
-    const { nickname } = await request.json();
+    const body = await request.json();
+    const result = await authService.checkNicknameAvailable(body);
 
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    const { data } = await supabase.from('profiles').select('nickname').eq('nickname', nickname).single();
-
-    const available = !data;
-
-    return NextResponse.json({
-      available,
-      message: available ? '사용 가능한 닉네임입니다' : '이미 사용 중인 닉네임입니다',
-    });
+    return NextResponse.json(result);
   } catch (error) {
-    console.error('Check nickname error: ', error);
-    return NextResponse.json({ success: false, message: '오류가 발생했습니다' }, { status: 500 });
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: error.issues?.[0]?.message ?? '유효하지 않은 요청입니다.',
+        },
+        { status: 400 }
+      );
+    }
+
+    console.error('[CheckUsername Error]', error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: '서버 오류가 발생했습니다',
+      },
+      { status: 500 }
+    );
   }
 }

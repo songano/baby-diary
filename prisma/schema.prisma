@@ -11,17 +11,39 @@ datasource db {
 // Example models
 
 model User {
-  id    Int     @id @default(autoincrement())
+  id String   @id @default(cuid())
+  nickname String @unique
   email String  @unique
-  name  String?
-  posts Post[]
+  password String
+
+  babyRelation BabyRelation
+
+  termsAgreed Boolean
+  privacyAgreed Boolean
+  marketingAgreed Boolean @default(false)
+
+  termsAgreeAt DateTime?
+  privacyAgreeAt DateTime?
+  marketingAgreeAt DateTime?
+
+  createAt DateTime @default(now())
+  updateAt DateTime @default(now())
+
+  @@map("users")
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+enum BabyRelation {
+  MOTHER
+  FATHER
+  GRANDMOTHER_PATERNAL
+  GRANDFATHER_PATERNAL
+  GRANDMOTHER_MATERNAL
+  GRANDFATHER_MATERNAL
+  AUNT_MATERNAL
+  AUNT_PATERNAL
+  UNCLE
+  GUARDIAN
+  OTHER
+
+  @@map("baby_relation")
 }
