@@ -1,4 +1,4 @@
-import { prisma } from '@/shared/lib/prisma/client';
+import prisma from '@/shared/lib/prisma/client';
 
 export class AuthRepository {
   async findByNickname(nickname: string) {

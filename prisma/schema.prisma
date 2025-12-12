@@ -4,32 +4,23 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  provider = "postgresql"
 }
 
-// Example models
-
 model User {
-  id String   @id @default(cuid())
-  nickname String @unique
-  email String  @unique
-  password String
-
-  babyRelation BabyRelation
-
-  termsAgreed Boolean
-  privacyAgreed Boolean
-  marketingAgreed Boolean @default(false)
-
-  termsAgreeAt DateTime?
-  privacyAgreeAt DateTime?
+  id               String       @id @default(cuid())
+  nickname         String       @unique
+  email            String       @unique
+  password         String
+  babyRelation     BabyRelation
+  termsAgreed      Boolean
+  privacyAgreed    Boolean
+  marketingAgreed  Boolean      @default(false)
+  termsAgreeAt     DateTime?
+  privacyAgreeAt   DateTime?
   marketingAgreeAt DateTime?
-
-  createAt DateTime @default(now())
-  updateAt DateTime @default(now())
-
-  @@map("users")
+  createAt         DateTime     @default(now())
+  updateAt         DateTime     @default(now())
 }
 
 enum BabyRelation {
@@ -44,6 +35,4 @@ enum BabyRelation {
   UNCLE
   GUARDIAN
   OTHER
-
-  @@map("baby_relation")
 }
