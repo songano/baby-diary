@@ -23,6 +23,24 @@ model User {
   updateAt         DateTime     @default(now())
 }
 
+model EmailVerification {
+  id String @id @default(cuid())
+  email String
+  code String
+  type EmailVerificationType
+  expiresAt DateTime
+  verified Boolean @default(false)
+  createdAt DateTime @default(now())
+  
+  @@index([email, type])
+  @@index([email, code, type])
+}
+
+enum EmailVerificationType {
+  SIGN_UP
+  PASSWORD_RESET
+}
+
 enum BabyRelation {
   MOTHER
   FATHER

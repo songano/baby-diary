@@ -44,7 +44,7 @@ const SignUpForm = () => {
     defaultValues: {
       nickname: '',
       email: '',
-      emailVerified: true,
+      emailVerified: false,
       password: '',
       passwordConfirm: '',
       relationship: undefined,
@@ -172,10 +172,10 @@ const SignUpForm = () => {
                   <Input {...field} id="email" aria-invalid={fieldState.invalid} placeholder="이메일을 입력해주세요" />
                   <Button
                     variant={'secondary'}
-                    disabled={fieldState.invalid || !field.value || watchEmailVerified}
+                    disabled={fieldState.invalid || !field.value}
                     onClick={handleVerifyEmail}
                   >
-                    {watchEmailVerified ? '인증완료' : '인증하기'}
+                    {isSentEmail ? '재발송' : '인증하기'}
                   </Button>
                 </div>
                 {isSentEmail && <Input type="text" id="verifyCode" placeholder="인증코드를 입력해주세요" />}
