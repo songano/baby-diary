@@ -10,5 +10,5 @@ export type CheckNicknameDto = z.infer<typeof checkNicknameSchema>;
 
 export interface CheckNicknameResponseDto {
   available: boolean;
-  username: string;
+  nickname: string;
 }

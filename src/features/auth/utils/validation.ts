@@ -44,7 +44,7 @@ export type SignUpFormData = z.infer<typeof signUpFormSchema>;
  */
 export const signInFormSchema = z.object({
   email: emailSchema,
-  password: z.string().min(1, '비밀번호를 입력헤주세요'),
+  password: z.string().min(1, '비밀번호를 입력해주세요'),
   rememberMe: z.boolean().optional(),
 });
 

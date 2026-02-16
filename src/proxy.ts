@@ -1,10 +1,10 @@
 import { type NextRequest } from 'next/server';
 
-import { updateSession } from '@/shared/lib/supabase/middleware';
+// import { updateSession } from '@/shared/lib/supabase/middleware';
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // update user's auth session
-  return await updateSession(request);
+  // return await updateSession(request);
 }
 
 export const config = {

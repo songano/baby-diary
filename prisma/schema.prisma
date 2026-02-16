@@ -20,7 +20,9 @@ model User {
   privacyAgreeAt   DateTime?
   marketingAgreeAt DateTime?
   createAt         DateTime     @default(now())
-  updateAt         DateTime     @default(now())
+  updateAt         DateTime     @updatedAt
+
+  @@map("users")
 }
 
 model EmailVerification {
@@ -32,6 +34,7 @@ model EmailVerification {
   verified Boolean @default(false)
   createdAt DateTime @default(now())
   
+  @@map("email_verifications")
   @@index([email, type])
   @@index([email, code, type])
 }
@@ -39,6 +42,8 @@ model EmailVerification {
 enum EmailVerificationType {
   SIGN_UP
   PASSWORD_RESET
+
+  @@map("email_verification_types")
 }
 
 enum BabyRelation {
@@ -53,4 +58,6 @@ enum BabyRelation {
   UNCLE
   GUARDIAN
   OTHER
+
+  @@map("baby_relations")
 }
