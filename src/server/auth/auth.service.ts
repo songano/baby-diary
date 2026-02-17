@@ -12,7 +12,7 @@ export class AuthService {
 
     return {
       available: !exists,
-      username: normalizedNickname,
+      nickname: normalizedNickname,
     };
   }
 }

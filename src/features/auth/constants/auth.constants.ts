@@ -65,6 +65,6 @@ export const AUTH_TIMEOUTS = {
  */
 export const AUTH_LIMITS = {
   MAX_LOGIN_ATTEMPTS: 5,
-  MAX_EMAIL_SEND_PER_DAY: 3,
+  MAX_EMAIL_SEND_PER_DAY: 5, // 하루 이메일 전송 횟수 5회 제한
   LOCKOUT_DURATION: 30 * 60, // 30분
 } as const;
